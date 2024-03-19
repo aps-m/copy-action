@@ -24740,32 +24740,45 @@ exports.CopyItem = void 0;
  */
 const fs = __importStar(__nccwpck_require__(7147));
 const path = __importStar(__nccwpck_require__(1017));
+const core = __importStar(__nccwpck_require__(2186));
 function CopyItem(src, dst_dir) {
     const src_dir = path.dirname(src);
     const pattern_str = path.basename(src);
     const re_pattern = new RegExp(pattern_str.replace('*', '.*'));
     const files = fs.readdirSync(src_dir);
-    for (const file of files) {
-        const filePathSrc = path.join(src_dir, file); // construct the full path to the file
-        const filePathDst = path.join(dst_dir, file); // construct the full path to the file
-        const probe = re_pattern.exec(file);
-        try {
+    let status = false;
+    let res_file = '';
+    try {
+        for (const file of files) {
+            const filePathSrc = path.join(src_dir, file); // construct the full path to the file
+            const filePathDst = path.join(dst_dir, file); // construct the full path to the file
+            const probe = re_pattern.exec(file);
             if (probe) {
                 if (probe[0] === file) {
-                    console.log(`File ${file} is target`);
+                    core.debug(`File ${file} is target`);
                     fs.copyFileSync(filePathSrc, filePathDst);
+                    status = true;
+                    res_file = file;
+                    break;
                 }
                 else {
-                    console.log(`File ${file} is not target step 2`);
+                    core.debug(`File ${file} is not target (step 2)`);
                 }
             }
             else {
-                console.log(`File ${file} is not target`);
+                core.debug(`File ${file} is not target (step 1)`);
             }
         }
-        catch (error) {
-            console.log(error);
-        }
+    }
+    catch (error) {
+        status = false;
+        console.log(error);
+    }
+    if (status) {
+        console.log(`File ${res_file} was copied succesfully!`);
+    }
+    else {
+        console.log(`Error of copying file`);
     }
 }
 exports.CopyItem = CopyItem;
