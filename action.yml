@@ -1,23 +1,22 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Copy action'
+description: 'Copy files from source path to defined directory'
+author: 'APS'
 
-# Add your action's branding here. This will appear on the GitHub Marketplace.
-branding:
-  icon: 'heart'
-  color: 'red'
+# # Add your action's branding here. This will appear on the GitHub Marketplace.
+# branding:
+#   icon: 'heart'
+#   color: 'red'
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  src_path:
+    description: 'Source path for copy'
     required: true
-    default: '1000'
-
-# Define your outputs here.
-outputs:
-  time:
-    description: 'Your output description here'
+    default: '*'
+  dst_dir:
+    description: 'Destination directory '
+    required: true
+    default: ''
 
 runs:
   using: node20
