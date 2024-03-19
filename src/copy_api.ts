@@ -11,7 +11,7 @@ export function CopyItem(src: string, dst_dir: string): void {
   const re_pattern = new RegExp(pattern_str.replace('*', '.*'))
   const files = fs.readdirSync(src_dir)
   let status = false
-  let res_file = ''
+  const res_files: string[] = []
 
   try {
     for (const file of files) {
@@ -25,8 +25,7 @@ export function CopyItem(src: string, dst_dir: string): void {
           core.debug(`File ${file} is target`)
           fs.copyFileSync(filePathSrc, filePathDst)
           status = true
-          res_file = file
-          break
+          res_files.push(file)
         } else {
           core.debug(`File ${file} is not target (step 2)`)
         }
@@ -40,8 +39,8 @@ export function CopyItem(src: string, dst_dir: string): void {
   }
 
   if (status) {
-    console.log(`File ${res_file} was copied succesfully!`)
+    console.log(`Files ${res_files} was copied succesfully!`)
   } else {
-    console.log(`Error of copying file`)
+    console.log(`Error of copying files`)
   }
 }

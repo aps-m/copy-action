@@ -24747,7 +24747,7 @@ function CopyItem(src, dst_dir) {
     const re_pattern = new RegExp(pattern_str.replace('*', '.*'));
     const files = fs.readdirSync(src_dir);
     let status = false;
-    let res_file = '';
+    let res_files = [];
     try {
         for (const file of files) {
             const filePathSrc = path.join(src_dir, file); // construct the full path to the file
@@ -24758,8 +24758,7 @@ function CopyItem(src, dst_dir) {
                     core.debug(`File ${file} is target`);
                     fs.copyFileSync(filePathSrc, filePathDst);
                     status = true;
-                    res_file = file;
-                    break;
+                    res_files.push(file);
                 }
                 else {
                     core.debug(`File ${file} is not target (step 2)`);
@@ -24775,7 +24774,7 @@ function CopyItem(src, dst_dir) {
         console.log(error);
     }
     if (status) {
-        console.log(`File ${res_file} was copied succesfully!`);
+        console.log(`Files ${res_files} was copied succesfully!`);
     }
     else {
         console.log(`Error of copying file`);
