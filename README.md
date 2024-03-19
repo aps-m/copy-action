@@ -23,18 +23,18 @@
 #### Использование полного имени файла
 ```
 - name: Copy file
-    uses: aps-m/copy-action@v1
-    with:
-      src_path: 'Folder/file.txt'
-      dst_dir: 'Path/To/destdir'
+  uses: aps-m/copy-action@v1
+  with:
+     src_path: 'Folder/file.txt'
+     dst_dir: 'Path/To/destdir'
 ```
 
 
 #### Использование маски имени файла
 ```
 - name: Copy file
-    uses: aps-m/copy-action@v1
-    with:
-      src_path: 'Folder/file_*.txt'
-      dst_dir: 'Path/To/destdir'
+  uses: aps-m/copy-action@v1
+  with:
+     src_path: 'Folder/file_*.txt'
+     dst_dir: 'Path/To/destdir'
 ```
