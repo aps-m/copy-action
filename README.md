@@ -21,9 +21,9 @@
 
 
 #### Использование полного имени файла
-```
+```yml
 - name: Copy file
-  uses: aps-m/copy-action@v1
+  uses: aps-m/copy-action@v2
   with:
      src_path: 'Folder/file.txt'
      dst_dir: 'Path/To/destdir'
@@ -31,9 +31,9 @@
 
 
 #### Использование маски имени файла
-```
+```yml
 - name: Copy file
-  uses: aps-m/copy-action@v1
+  uses: aps-m/copy-action@v2
   with:
      src_path: 'Folder/file_*.txt'
      dst_dir: 'Path/To/destdir'

@@ -24744,10 +24744,10 @@ const core = __importStar(__nccwpck_require__(2186));
 function CopyItem(src, dst_dir) {
     const src_dir = path.dirname(src);
     const pattern_str = path.basename(src);
-    const re_pattern = new RegExp(pattern_str.replace('*', '.*'));
+    const re_pattern = new RegExp(pattern_str.replace(/\*/g, '.*'));
     const files = fs.readdirSync(src_dir);
     let status = false;
-    let res_files = [];
+    const res_files = [];
     try {
         for (const file of files) {
             const filePathSrc = path.join(src_dir, file); // construct the full path to the file
@@ -24777,7 +24777,7 @@ function CopyItem(src, dst_dir) {
         console.log(`Files ${res_files} was copied succesfully!`);
     }
     else {
-        console.log(`Error of copying file`);
+        console.log(`Error of copying files (files not found)`);
     }
 }
 exports.CopyItem = CopyItem;
