@@ -24778,6 +24778,7 @@ function CopyItem(src, dst_dir) {
     }
     else {
         console.log(`Error of copying files (files not found)`);
+        core.setFailed(`Error of copying files (files not found)`);
     }
 }
 exports.CopyItem = CopyItem;

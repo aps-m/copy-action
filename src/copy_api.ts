@@ -42,5 +42,6 @@ export function CopyItem(src: string, dst_dir: string): void {
     console.log(`Files ${res_files} was copied succesfully!`)
   } else {
     console.log(`Error of copying files (files not found)`)
+    core.setFailed(`Error of copying files (files not found)`)
   }
 }
