@@ -7,7 +7,7 @@ import * as core from '@actions/core'
 
 export function CopyItem(src: string, dst_dir: string): void {
   const src_dir = path.dirname(src)
-  const pattern_str = path.basename(src)
+  const pattern_str = path.basename(src).replace(/\./g, '\\.')
   const re_pattern = new RegExp(pattern_str.replace(/\*/g, '.*'))
   const files = fs.readdirSync(src_dir)
   let status = false
