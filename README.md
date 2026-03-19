@@ -17,21 +17,21 @@
 
 ## Примеры использования
 
-#### Использование полного имени файла
+### Использование полного имени файла
 
 ```yml
 - name: Copy file
-  uses: aps-m/copy-action@v2
+  uses: aps-m/copy-action@v5
   with:
     src_path: 'Folder/file.txt'
     dst_dir: 'Path/To/destdir'
 ```
 
-#### Использование маски имени файла
+### Использование маски имени файла
 
 ```yml
 - name: Copy file
-  uses: aps-m/copy-action@v2
+  uses: aps-m/copy-action@v5
   with:
     src_path: 'Folder/file_*.txt'
     dst_dir: 'Path/To/destdir'
