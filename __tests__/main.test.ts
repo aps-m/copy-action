@@ -7,38 +7,34 @@
  */
 
 import * as core from '@actions/core'
+import * as copyApi from '../src/copy_api'
 import * as main from '../src/main'
 
 // Mock the action's main function
 const runMock = jest.spyOn(main, 'run')
-
-// Other utilities
-const timeRegex = /^\d{2}:\d{2}:\d{2}/
+const copyItemMock = jest.spyOn(copyApi, 'CopyItem').mockImplementation()
 
 // Mock the GitHub Actions core library
-let debugMock: jest.SpiedFunction<typeof core.debug>
-let errorMock: jest.SpiedFunction<typeof core.error>
 let getInputMock: jest.SpiedFunction<typeof core.getInput>
 let setFailedMock: jest.SpiedFunction<typeof core.setFailed>
-let setOutputMock: jest.SpiedFunction<typeof core.setOutput>
 
 describe('action', () => {
   beforeEach(() => {
     jest.clearAllMocks()
 
-    debugMock = jest.spyOn(core, 'debug').mockImplementation()
-    errorMock = jest.spyOn(core, 'error').mockImplementation()
     getInputMock = jest.spyOn(core, 'getInput').mockImplementation()
     setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
-    setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
+    copyItemMock.mockImplementation()
   })
 
-  it('sets the time output', async () => {
+  it('copies files using action inputs', async () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation(name => {
       switch (name) {
-        case 'milliseconds':
-          return '500'
+        case 'src_path':
+          return 'build/file_*.txt'
+        case 'dst_dir':
+          return 'artifacts'
         default:
           return ''
       }
@@ -47,30 +43,27 @@ describe('action', () => {
     await main.run()
     expect(runMock).toHaveReturned()
 
-    // Verify that all of the core library functions were called correctly
-    expect(debugMock).toHaveBeenNthCalledWith(1, 'Waiting 500 milliseconds ...')
-    expect(debugMock).toHaveBeenNthCalledWith(
-      2,
-      expect.stringMatching(timeRegex)
-    )
-    expect(debugMock).toHaveBeenNthCalledWith(
-      3,
-      expect.stringMatching(timeRegex)
-    )
-    expect(setOutputMock).toHaveBeenNthCalledWith(
+    expect(getInputMock).toHaveBeenNthCalledWith(1, 'src_path')
+    expect(getInputMock).toHaveBeenNthCalledWith(2, 'dst_dir')
+    expect(copyItemMock).toHaveBeenNthCalledWith(
       1,
-      'time',
-      expect.stringMatching(timeRegex)
+      'build/file_*.txt',
+      'artifacts'
     )
-    expect(errorMock).not.toHaveBeenCalled()
+    expect(setFailedMock).not.toHaveBeenCalled()
   })
 
   it('sets a failed status', async () => {
-    // Set the action's inputs as return values from core.getInput()
+    copyItemMock.mockImplementationOnce(() => {
+      throw new Error('copy failed')
+    })
+
     getInputMock.mockImplementation(name => {
       switch (name) {
-        case 'milliseconds':
-          return 'this is not a number'
+        case 'src_path':
+          return 'build/file.txt'
+        case 'dst_dir':
+          return 'artifacts'
         default:
           return ''
       }
@@ -79,11 +72,6 @@ describe('action', () => {
     await main.run()
     expect(runMock).toHaveReturned()
 
-    // Verify that all of the core library functions were called correctly
-    expect(setFailedMock).toHaveBeenNthCalledWith(
-      1,
-      'milliseconds not a number'
-    )
-    expect(errorMock).not.toHaveBeenCalled()
+    expect(setFailedMock).toHaveBeenNthCalledWith(1, 'copy failed')
   })
 })
