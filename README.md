@@ -21,7 +21,7 @@
 
 ```yml
 - name: Copy file
-  uses: aps-m/copy-action@v5
+  uses: aps-m/copy-action@v6
   with:
     src_path: 'Folder/file.txt'
     dst_dir: 'Path/To/destdir'
@@ -31,7 +31,7 @@
 
 ```yml
 - name: Copy file
-  uses: aps-m/copy-action@v5
+  uses: aps-m/copy-action@v6
   with:
     src_path: 'Folder/file_*.txt'
     dst_dir: 'Path/To/destdir'
