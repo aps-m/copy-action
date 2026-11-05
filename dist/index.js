@@ -31945,8 +31945,12 @@ const path = __importStar(__nccwpck_require__(1017));
 const core = __importStar(__nccwpck_require__(2186));
 function CopyItem(src, dst_dir) {
     const src_dir = path.dirname(src);
-    const pattern_str = path.basename(src).replace(/\./g, '\\.');
-    const re_pattern = new RegExp(pattern_str.replace(/\*/g, '.*'));
+    const pattern_str = path
+        .basename(src)
+        .split('*')
+        .map(part => part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+        .join('.*');
+    const re_pattern = new RegExp(pattern_str);
     const files = fs.readdirSync(src_dir);
     let status = false;
     const res_files = [];
